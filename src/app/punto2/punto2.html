@@ -1,1 +1,70 @@
-<p>punto2 works!</p>
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Productos Destacados</h2>
+    <button class="btn btn-success" (click)="abrirCarrito()">
+      🛒 Carrito
+      <span class="badge bg-light text-dark">{{ carrito.length }}</span>
+    </button>
+  </div>
+
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    <div class="col" *ngFor="let producto of productos">
+      <div class="card h-100">
+        <img [src]="producto.img" class="card-img-top" style="height: 200px; object-fit: cover;">
+        <div class="card-body">
+          <h5 class="card-title">{{ producto.nombre }}</h5>
+          <p class="card-text">{{ producto.descripcion }}</p>
+          <p class="fw-bold">{{ producto.precio | currency:'USD' }}</p>
+        </div>
+        <div class="card-footer">
+          <button class="btn w-100"
+                  [class.btn-primary]="!estaEnCarrito(producto)"
+                  [class.btn-success]="estaEnCarrito(producto)"
+                  (click)="agregarAlCarrito(producto)"
+                  [disabled]="estaEnCarrito(producto)">
+            {{ estaEnCarrito(producto) ? '✓ Agregado' : 'Agregar al carrito' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DEL CARRITO -->
+<div class="modal fade" id="modalCarrito" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">🛒 Mi Carrito</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="carrito.length === 0" class="text-center text-muted py-4">
+          El carrito está vacío
+        </div>
+        <div *ngIf="carrito.length > 0">
+          <div class="list-group">
+            <div class="list-group-item d-flex justify-content-between align-items-center"
+                 *ngFor="let item of carrito">
+              <div>
+                <strong>{{ item.nombre }}</strong>
+                <p class="mb-0 text-muted small">{{ item.descripcion }}</p>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <span class="fw-bold">{{ item.precio | currency:'USD' }}</span>
+                <button class="btn btn-sm btn-danger" (click)="eliminarDelCarrito(item)">✕</button>
+              </div>
+            </div>
+          </div>
+          <div class="text-end mt-3">
+            <h4>Total: <strong>{{ total | currency:'USD' }}</strong></h4>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <button class="btn btn-success" *ngIf="carrito.length > 0">Confirmar Compra</button>
+      </div>
+    </div>
+  </div>
+</div>
