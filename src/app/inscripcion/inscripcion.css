@@ -1,0 +1,29 @@
+.card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: none;
+}
+
+.card-header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.form-label {
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: #495057;
+}
+
+.resumen-card-estudiante { border-left: 4px solid #0d6efd; }
+.resumen-card-egresado   { border-left: 4px solid #198754; }
+.resumen-card-particular { border-left: 4px solid #6c757d; }
+
+.table th {
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.table td {
+  vertical-align: middle;
+  font-size: 0.9rem;
+}

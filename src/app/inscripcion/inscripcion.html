@@ -1,1 +1,176 @@
-<p>inscripcion works!</p>
+<div class="container mt-4 mb-5">
+  <h2 class="mb-1 fw-bold">Inscripción a Cursos</h2>
+  <p class="text-muted mb-4">Completá el formulario para registrar una nueva inscripción.</p>
+
+  <!-- FORMULARIO -->
+  <div class="card mb-4">
+    <div class="card-header bg-primary text-white py-3">
+      <h5 class="mb-0 fw-semibold">Nueva Inscripción</h5>
+    </div>
+    <div class="card-body p-4">
+      <div class="row g-3">
+
+        <div class="col-md-4">
+          <label class="form-label">DNI</label>
+          <input type="text" class="form-control"
+                 [(ngModel)]="dni"
+                 [class.is-invalid]="enviado && !dniValido"
+                 [class.is-valid]="enviado && dniValido"
+                 placeholder="Ej: 30123456">
+          <div class="invalid-feedback">DNI debe tener 7 u 8 dígitos numéricos.</div>
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-control"
+                 [(ngModel)]="email"
+                 [class.is-invalid]="enviado && !emailValido"
+                 [class.is-valid]="enviado && emailValido"
+                 placeholder="correo@ejemplo.com">
+          <div class="invalid-feedback">Formato de email inválido.</div>
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Curso</label>
+          <input type="text" class="form-control"
+                 [(ngModel)]="curso"
+                 [class.is-invalid]="enviado && !cursoValido"
+                 [class.is-valid]="enviado && cursoValido"
+                 placeholder="Nombre del curso">
+          <div class="invalid-feedback">Mínimo 3 caracteres.</div>
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Precio del Curso</label>
+          <div class="input-group">
+            <span class="input-group-text">$</span>
+            <input type="number" class="form-control"
+                   [(ngModel)]="precio"
+                   (change)="precio = precio"
+                   [class.is-invalid]="enviado && !precioValido"
+                   [class.is-valid]="enviado && precioValido"
+                   placeholder="0.00" min="1">
+            <div class="invalid-feedback">Ingresá un precio mayor a cero.</div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Categoría de Alumno</label>
+          <select class="form-select"
+                  [(ngModel)]="categoriaAlumno"
+                  (change)="categoriaAlumno = categoriaAlumno"
+                  [class.is-invalid]="enviado && !categoriaValida"
+                  [class.is-valid]="enviado && categoriaValida">
+            <option [ngValue]="null" disabled>Seleccionar...</option>
+            <option *ngFor="let cat of categorias" [ngValue]="cat.valor">
+              {{ cat.label }} — {{ cat.descuento * 100 }}% desc.
+            </option>
+          </select>
+          <div class="invalid-feedback">Seleccioná una categoría.</div>
+        </div>
+
+        <!-- PRECIO FINAL — visible solo si precio y categoría ingresados -->
+        <div class="col-md-4 d-flex align-items-end">
+          <div *ngIf="mostrarPrecioFinal"
+               class="w-100 rounded-3 bg-success bg-opacity-10 border border-success px-3 py-2">
+            <small class="text-muted d-block">Descuento: {{ descuento * 100 }}%</small>
+            <span class="fw-bold text-success fs-6">
+              Total: {{ precioFinal | currency:'USD' }}
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="mt-4 pt-2 border-top">
+        <button class="btn btn-primary px-4" (click)="registrar()">
+          Registrar Inscripción
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LISTA DE INSCRIPCIONES -->
+  <div class="card mb-4" *ngIf="inscripciones.length > 0">
+    <div class="card-header py-3">
+      <h5 class="mb-0 fw-semibold">Inscripciones Registradas</h5>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-hover table-striped mb-0">
+        <thead class="table-dark">
+          <tr>
+            <th>DNI</th>
+            <th>Curso</th>
+            <th>Email</th>
+            <th>Categoría</th>
+            <th>Fecha</th>
+            <th>Precio Base</th>
+            <th>Precio Final</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of inscripciones; let i = index">
+            <td>{{ item.dni }}</td>
+            <td>{{ item.curso }}</td>
+            <td>{{ item.email }}</td>
+            <td>{{ nombreCategoria(item.categoriaAlumno) }}</td>
+            <td>{{ item.fechaInscripcion | date:'dd/MM/yyyy' }}</td>
+            <td class="text-muted">{{ item.precio | currency:'USD' }}</td>
+            <td><strong class="text-success">{{ item.precioFinal | currency:'USD' }}</strong></td>
+            <td>
+              <button class="btn btn-sm btn-outline-danger" (click)="eliminar(i)">✕</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- RESUMEN POR CATEGORÍA -->
+  <div class="card" *ngIf="inscripciones.length > 0">
+    <div class="card-header py-3">
+      <h5 class="mb-0 fw-semibold">Resumen por Categoría</h5>
+    </div>
+    <div class="card-body p-4">
+      <div class="row g-3 mb-3">
+
+        <div class="col-md-4">
+          <div class="card h-100 resumen-card-estudiante">
+            <div class="card-body text-center py-3">
+              <h6 class="fw-bold text-primary mb-2">Estudiante</h6>
+              <p class="mb-1 text-muted small">Inscriptos: <strong class="text-dark">{{ resumenPorCategoria[0].cantidad }}</strong></p>
+              <p class="mb-0 fw-bold text-primary">{{ resumenPorCategoria[0].total | currency:'USD' }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card h-100 resumen-card-egresado">
+            <div class="card-body text-center py-3">
+              <h6 class="fw-bold text-success mb-2">Egresado</h6>
+              <p class="mb-1 text-muted small">Inscriptos: <strong class="text-dark">{{ resumenPorCategoria[1].cantidad }}</strong></p>
+              <p class="mb-0 fw-bold text-success">{{ resumenPorCategoria[1].total | currency:'USD' }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="card h-100 resumen-card-particular">
+            <div class="card-body text-center py-3">
+              <h6 class="fw-bold text-secondary mb-2">Particular</h6>
+              <p class="mb-1 text-muted small">Inscriptos: <strong class="text-dark">{{ resumenPorCategoria[2].cantidad }}</strong></p>
+              <p class="mb-0 fw-bold text-secondary">{{ resumenPorCategoria[2].total | currency:'USD' }}</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <hr>
+      <div class="text-end fs-5">
+        Total General: <strong class="text-primary">{{ totalGeneral | currency:'USD' }}</strong>
+      </div>
+    </div>
+  </div>
+
+</div>
