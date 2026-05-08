@@ -14,10 +14,10 @@ interface Evento {
 })
 export class Punto1 {
   eventos: Evento[] = [
-    { nombre: 'Taller de Yoga', descripcion: 'Clase para principiantes todos los martes', img: 'https://via.placeholder.com/600x300?text=Yoga' },
-    { nombre: 'Feria de Libros', descripcion: 'Exposición de libros usados y nuevos', img: 'https://via.placeholder.com/600x300?text=Libros' },
-    { nombre: 'Concierto de Jazz', descripcion: 'Banda local en vivo en el auditorio', img: 'https://via.placeholder.com/600x300?text=Jazz' },
-    { nombre: 'Curso de Fotografía', descripcion: 'Taller práctico con cámara réflex', img: 'https://via.placeholder.com/600x300?text=Fotografia' },
+    { nombre: 'Minecraft Educativo', descripcion: 'Taller de lógica y creatividad usando Minecraft como herramienta de aprendizaje', img: 'imagenes/minecraft.png' },
+    { nombre: 'Videojuegos Competitivos', descripcion: 'Torneo de esports universitario con equipos y premios especiales', img: 'imagenes/gaming.png' },
+    { nombre: 'Música para Estudiar', descripcion: 'Sesión grupal con playlists curadas para mayor concentración al estudiar', img: 'imagenes/musica.png' },
+    { nombre: 'Curso de Oratoria', descripcion: 'Técnicas de comunicación para hablar en público con claridad y confianza', img: 'imagenes/oratoria.png' },
   ];
 
   indiceActual: number = 0;
