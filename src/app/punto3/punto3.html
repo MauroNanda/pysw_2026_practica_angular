@@ -1,1 +1,49 @@
-<p>punto3 works!</p>
+<div class="container mt-4">
+  <h2 class="text-center mb-3">🧠 Juego de Memoria</h2>
+
+  <div class="d-flex justify-content-center gap-4 mb-3">
+    <span class="badge bg-info fs-6">Intentos restantes: {{ intentosRestantes }}</span>
+  </div>
+
+  <div class="d-flex justify-content-center gap-3 mb-4">
+    <button class="btn btn-danger" (click)="reiniciar()">🔄 REINICIAR</button>
+    <button class="btn btn-success" (click)="iniciar()"
+            [disabled]="juegoIniciado && !juegoTerminado">▶️ INICIAR</button>
+    <button class="btn btn-warning" (click)="intentar()"
+            [disabled]="!puedeIntentar">🎯 INTENTAR</button>
+  </div>
+
+  <div *ngIf="!juegoIniciado" class="alert alert-secondary text-center mb-4">
+    <strong>¡Bienvenido!</strong> Presioná <strong>INICIAR</strong> para comenzar el juego.
+  </div>
+  
+  <div *ngIf="juegoIniciado && !juegoTerminado && !puedeVoltear && cartasVolteadasAhora.length === 0 && !esperandoComparacion" class="alert alert-warning text-center mb-4">
+    <strong>¡Atención!</strong> Presioná <strong>INTENTAR</strong> para habilitar el tablero y buscar un par.
+  </div>
+
+  <div *ngIf="puedeVoltear && cartasVolteadasAhora.length < 2" class="alert alert-success text-center mb-4">
+    <strong>¡Tu turno!</strong> Haz clic en <strong>{{ 2 - cartasVolteadasAhora.length }}</strong> carta(s) más.
+  </div>
+
+  <div *ngIf="juegoTerminado" class="alert alert-info text-center fs-5">
+    {{ mensajeFinal }}
+    <button class="btn btn-primary ms-3" (click)="reiniciar()">Jugar de nuevo</button>
+  </div>
+
+  <div class="row row-cols-4 g-3 justify-content-center" style="max-width: 500px; margin: auto;">
+    <div class="col" *ngFor="let carta of tablero">
+      <div class="card text-center"
+           style="cursor: pointer; height: 100px; font-size: 2rem; user-select: none;"
+           [class.bg-light]="!carta.estaDescubierta && !carta.estaVolteada"
+           [class.bg-success]="carta.estaDescubierta"
+           [class.bg-warning]="carta.estaVolteada && !carta.estaDescubierta"
+           [class.opacity-50]="juegoIniciado && !puedeIntentar && !carta.estaDescubierta && !carta.estaVolteada && cartasVolteadasAhora.length === 0"
+           (click)="voltearCarta(carta)">
+        <div class="card-body d-flex align-items-center justify-content-center p-1">
+          <span *ngIf="!carta.estaVolteada && !carta.estaDescubierta">❓</span>
+          <span *ngIf="carta.estaVolteada || carta.estaDescubierta">{{ carta.img }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
