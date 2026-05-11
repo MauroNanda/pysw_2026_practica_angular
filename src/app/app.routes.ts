@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
-import { Punto1 } from './punto1/punto1';
-import { Punto2 } from './punto2/punto2';
-import { Punto3 } from './punto3/punto3';
-import { Inscripcion } from './inscripcion/inscripcion';
+import { Punto1 } from './features/punto1/punto1';
+import { Punto2 } from './features/punto2/punto2';
+import { Punto3 } from './features/punto3/punto3';
+import { Inscripcion } from './features/inscripcion/inscripcion';
 
 export const routes: Routes = [
     { path: 'punto1', component: Punto1 },

@@ -1,7 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { InscripcionService, InscripcionData } from '../services/inscripcion';
+import { InscripcionService, InscripcionData } from '../../core/services/inscripcion';
+import DataTable from 'datatables.net-bs5';
 
 @Component({
   selector: 'app-inscripcion',
@@ -9,8 +10,10 @@ import { InscripcionService, InscripcionData } from '../services/inscripcion';
   templateUrl: './inscripcion.html',
   styleUrl: './inscripcion.css',
 })
-export class Inscripcion {
+export class Inscripcion implements AfterViewInit {
   private service = inject(InscripcionService);
+  private cdr = inject(ChangeDetectorRef);
+  private dt: any = null;
 
   dni = '';
   curso = '';
@@ -25,10 +28,9 @@ export class Inscripcion {
     { valor: 3, label: 'Particular',  descuento: 0    },
   ];
 
-  // Validaciones individuales
-  get dniValido(): boolean   { return /^\d{7,8}$/.test(this.dni); }
-  get emailValido(): boolean { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email); }
-  get cursoValido(): boolean { return this.curso.trim().length >= 3; }
+  get dniValido(): boolean    { return /^\d{7,8}$/.test(this.dni); }
+  get emailValido(): boolean  { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email); }
+  get cursoValido(): boolean  { return this.curso.trim().length >= 3; }
   get precioValido(): boolean { return !!this.precio && this.precio > 0; }
   get categoriaValida(): boolean { return !!this.categoriaAlumno; }
 
@@ -71,6 +73,37 @@ export class Inscripcion {
     return this.categorias.find(c => c.valor === valor)?.label ?? '';
   }
 
+  ngAfterViewInit(): void {
+    this.initDT();
+  }
+
+  private initDT(): void {
+    // @ts-ignore
+    this.dt = new DataTable('#tablaInscripciones', {
+      pageLength: 5,
+      lengthMenu: [5, 10, 25],
+      language: {
+        search:       'Buscar:',
+        lengthMenu:   'Mostrar _MENU_ registros',
+        info:         'Mostrando _START_ a _END_ de _TOTAL_ inscripciones',
+        infoEmpty:    'Sin inscripciones registradas',
+        emptyTable:   'No hay inscripciones aún',
+        paginate: {
+          first:    'Primero',
+          last:     'Último',
+          next:     'Siguiente',
+          previous: 'Anterior',
+        },
+      },
+    });
+  }
+
+  private refreshDT(): void {
+    if (this.dt) { this.dt.destroy(); this.dt = null; }
+    this.cdr.detectChanges();
+    setTimeout(() => this.initDT(), 0);
+  }
+
   registrar(): void {
     this.enviado = true;
     if (!this.formularioValido) return;
@@ -84,10 +117,12 @@ export class Inscripcion {
       precioFinal: this.precioFinal,
     });
     this.resetForm();
+    this.refreshDT();
   }
 
   eliminar(index: number): void {
     this.service.eliminar(index);
+    this.refreshDT();
   }
 
   private resetForm(): void {

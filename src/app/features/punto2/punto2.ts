@@ -18,12 +18,12 @@ interface Producto {
 export class Punto2 {
 
   productos: Producto[] = [
-    { id: 1, nombre: 'Notebook Asus 13L', descripcion: 'Disco 40GB, 15 pulgadas', img: 'https://via.placeholder.com/300x200?text=Notebook', precio: 450.50 },
-    { id: 2, nombre: 'Monitor LG 14"', descripcion: 'Full HD, 24 pulgadas', img: 'https://via.placeholder.com/300x200?text=Monitor', precio: 299.99 },
-    { id: 3, nombre: 'Teclado Mecánico', descripcion: 'RGB, switches blue', img: 'https://via.placeholder.com/300x200?text=Teclado', precio: 89.00 },
-    { id: 4, nombre: 'Mouse Logitech', descripcion: 'Inalámbrico, 1600 DPI', img: 'https://via.placeholder.com/300x200?text=Mouse', precio: 45.00 },
-    { id: 5, nombre: 'Auriculares Sony', descripcion: 'Noise cancelling', img: 'https://via.placeholder.com/300x200?text=Auriculares', precio: 199.99 },
-    { id: 6, nombre: 'Webcam HD', descripcion: '1080p, micrófono integrado', img: 'https://via.placeholder.com/300x200?text=Webcam', precio: 75.00 },
+    { id: 1, nombre: 'Notebook Asus 13L', descripcion: 'Disco 40GB, 15 pulgadas', img: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=300&h=200&fit=crop', precio: 450.50 },
+    { id: 2, nombre: 'Monitor LG 14"', descripcion: 'Full HD, 24 pulgadas', img: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=300&h=200&fit=crop', precio: 299.99 },
+    { id: 3, nombre: 'Teclado Mecánico', descripcion: 'RGB, switches blue', img: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=300&h=200&fit=crop', precio: 89.00 },
+    { id: 4, nombre: 'Mouse Logitech', descripcion: 'Inalámbrico, 1600 DPI', img: 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=300&h=200&fit=crop', precio: 45.00 },
+    { id: 5, nombre: 'Auriculares Sony', descripcion: 'Noise cancelling', img: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=200&fit=crop', precio: 199.99 },
+    { id: 6, nombre: 'Webcam HD', descripcion: '1080p, micrófono integrado', img: 'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=300&h=200&fit=crop', precio: 75.00 },
   ];
 
   carrito: Producto[] = [];
